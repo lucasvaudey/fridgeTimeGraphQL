@@ -35,7 +35,8 @@ export class Recipe extends BaseEntity {
   @Column({ type: "text" })
   description: string;
 
-  @OneToMany(() => Ingredient, (ingredient) => ingredient.recipe)
+  @Field(() => [Ingredient])
+  @Column(() => Ingredient)
   ingredients: Ingredient[];
 
   @Field(() => Int)

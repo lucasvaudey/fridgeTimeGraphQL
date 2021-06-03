@@ -47,7 +47,8 @@ __decorate([
     __metadata("design:type", String)
 ], Recipe.prototype, "description", void 0);
 __decorate([
-    typeorm_1.OneToMany(() => Ingredient_1.Ingredient, (ingredient) => ingredient.recipe),
+    type_graphql_1.Field(() => [Ingredient_1.Ingredient]),
+    typeorm_1.Column(() => Ingredient_1.Ingredient),
     __metadata("design:type", Array)
 ], Recipe.prototype, "ingredients", void 0);
 __decorate([

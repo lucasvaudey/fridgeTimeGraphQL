@@ -1,5 +1,11 @@
-import { Field, Int, ObjectType } from "type-graphql";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Field, Float, Int, ObjectType } from "type-graphql";
+import {
+  Column,
+  Double,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Recipe } from "./Recipe";
 
 @Entity()
@@ -9,9 +15,13 @@ export class Ingredient {
   @Field(() => Int)
   id!: number;
 
+  @Field(() => Double)
+  @Column({ nullable: true })
+  quantity: number;
+
   @Field(() => String)
   @Column({ nullable: true })
-  quantity: string;
+  refQuant: string;
 
   @Field(() => String)
   @Column({ unique: true })

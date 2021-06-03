@@ -21,10 +21,15 @@ __decorate([
     __metadata("design:type", Number)
 ], Ingredient.prototype, "id", void 0);
 __decorate([
+    type_graphql_1.Field(() => typeorm_1.Double),
+    typeorm_1.Column({ nullable: true }),
+    __metadata("design:type", Number)
+], Ingredient.prototype, "quantity", void 0);
+__decorate([
     type_graphql_1.Field(() => String),
     typeorm_1.Column({ nullable: true }),
     __metadata("design:type", String)
-], Ingredient.prototype, "quantity", void 0);
+], Ingredient.prototype, "refQuant", void 0);
 __decorate([
     type_graphql_1.Field(() => String),
     typeorm_1.Column({ unique: true }),

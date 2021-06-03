@@ -24,6 +24,7 @@ const User_1 = require("./entities/User");
 const hello_1 = require("./resolvers/hello");
 const users_1 = require("./resolvers/users");
 const ioredis_1 = __importDefault(require("ioredis"));
+const Fridge_1 = require("./entities/Fridge");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const conn = yield typeorm_1.createConnection({
         type: "postgres",
@@ -31,7 +32,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         username: "lucas",
         logging: true,
         synchronize: true,
-        entities: [User_1.User, Recipe_1.Recipe, Ingredient_1.Ingredient],
+        entities: [User_1.User, Recipe_1.Recipe, Ingredient_1.Ingredient, Fridge_1.Fridge],
     });
     const app = express_1.default();
     const RedisStore = connect_redis_1.default(express_session_1.default);

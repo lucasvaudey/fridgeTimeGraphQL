@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
+const Fridge_1 = require("./Fridge");
 const Recipe_1 = require("./Recipe");
 let User = class User extends typeorm_1.BaseEntity {
     constructor() {
@@ -49,6 +50,10 @@ __decorate([
     typeorm_1.Column({ type: "text" }),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
+__decorate([
+    typeorm_1.OneToOne(() => Fridge_1.Fridge, (fridge) => fridge.user),
+    __metadata("design:type", Fridge_1.Fridge)
+], User.prototype, "fridge", void 0);
 __decorate([
     typeorm_1.OneToMany(() => Recipe_1.Recipe, (recipe) => recipe.user),
     __metadata("design:type", Array)

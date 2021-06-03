@@ -10,6 +10,7 @@ import { User } from "./entities/User";
 import { HelloResolver } from "./resolvers/hello";
 import { UsersResolver } from "./resolvers/users";
 import Redis from "ioredis";
+import { Fridge } from "./entities/Fridge";
 
 const main = async () => {
   const conn = await createConnection({
@@ -18,7 +19,7 @@ const main = async () => {
     username: "lucas",
     logging: true,
     synchronize: true,
-    entities: [User, Recipe, Ingredient],
+    entities: [User, Recipe, Ingredient, Fridge],
   });
   const app = express();
   const RedisStore = connectRedis(session);
