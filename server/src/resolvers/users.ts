@@ -1,5 +1,5 @@
 import argon2 from "argon2";
-import { Users } from "../entities/Users";
+import { User } from "../entities/User";
 import {
   Arg,
   Ctx,
@@ -7,8 +7,11 @@ import {
   InputType,
   Mutation,
   ObjectType,
+  Query,
   Resolver,
 } from "type-graphql";
+import { userVerif } from "../utils/userVerif";
+import { MyContext } from "src/types";
 
 @ObjectType()
 class FieldError {
@@ -19,11 +22,11 @@ class FieldError {
 }
 
 @ObjectType()
-class UserResponse {
+export class UserResponse {
   @Field(() => FieldError, { nullable: true })
   error?: FieldError;
-  @Field(() => Users, { nullable: true })
-  user?: Users;
+  @Field(() => User, { nullable: true })
+  user?: User;
 }
 
 @InputType()
@@ -40,27 +43,31 @@ export class ConnexionInput {
 export class UsersResolver {
   @Mutation(() => UserResponse)
   async register(
-    @Arg("options") options: ConnexionInput
+    @Arg("options") options: ConnexionInput,
+    @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
-    const userTest = await Users.findOne({ username: options.username });
-    const emailTest = await Users.findOne({ email: options.email });
-    if (userTest != null) {
-      return {
-        error: { field: "username", message: "Ce pseudo est déjà utilisé." },
-      };
+    const error = await userVerif(options, false);
+    if (error != null) {
+      return error;
     }
-    if (emailTest != null) {
-      return {
-        error: { field: "email", message: "Cet email est déjà utilisé." },
-      };
-    }
-    //TODO: register, etc... verification
     const hashedPassword = await argon2.hash(options.password);
-    const user = await Users.create({
+    const user = await User.create({
       username: options.username,
       email: options.email,
       password: hashedPassword,
     }).save();
+    req.session.userId = user.id;
+    console.log(req.session);
     return { user };
+  }
+
+  @Query(() => User, { nullable: true })
+  async me(@Ctx() { req }: MyContext) {
+    console.log(req.session);
+    if (req.session.userId == null) {
+      return null;
+    } else {
+      return await User.findOne({ id: req.session.userId });
+    }
   }
 }

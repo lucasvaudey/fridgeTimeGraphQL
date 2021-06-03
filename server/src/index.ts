@@ -1,10 +1,15 @@
 import { ApolloServer } from "apollo-server-express";
 import express from "express";
+import session from "express-session";
+import connectRedis from "connect-redis";
 import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
-import { Users } from "./entities/Users";
+import { Ingredient } from "./entities/Ingredient";
+import { Recipe } from "./entities/Recipe";
+import { User } from "./entities/User";
 import { HelloResolver } from "./resolvers/hello";
 import { UsersResolver } from "./resolvers/users";
+import Redis from "ioredis";
 
 const main = async () => {
   const conn = await createConnection({
@@ -13,9 +18,29 @@ const main = async () => {
     username: "lucas",
     logging: true,
     synchronize: true,
-    entities: [Users],
+    entities: [User, Recipe, Ingredient],
   });
   const app = express();
+  const RedisStore = connectRedis(session);
+  const redis = new Redis();
+  app.use(
+    session({
+      name: "qid",
+      resave: false,
+      saveUninitialized: false,
+      store: new RedisStore({
+        client: redis,
+        disableTouch: true,
+      }),
+      secret: "hello",
+      cookie: {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false,
+        maxAge: 1000 * 60 * 60 * 24 * 7, //7 jours
+      },
+    })
+  );
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [HelloResolver, UsersResolver],
