@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id("com.apollographql.apollo").version("2.5.8")
 }
 
 android {
@@ -8,6 +9,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
+        vectorDrawables.useSupportLibrary = true
         applicationId "com.fridgeTime.app"
         minSdkVersion 16
         targetSdkVersion 30
@@ -32,6 +34,10 @@ android {
     }
 }
 
+apollo{
+    generateKotlinModels.set(true)
+}
+
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -42,4 +48,10 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    //apollo
+    implementation 'com.apollographql.apollo:apollo-runtime:2.5.8'
+    implementation 'com.apollographql.apollo:apollo-coroutines-support:2.5.8'
+    //viewModelScope
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
 }
